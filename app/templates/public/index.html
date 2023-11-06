@@ -1,0 +1,75 @@
+{% extends "public/templates/base_template.html" %} {% block title %}Home{% endblock %} {% block main %}
+<style>
+  .bg-white {
+    background-color: white;
+  }
+
+  /* Menambahkan gaya untuk mengatur sejajar */
+  .sections-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .section {
+    width: 45%; /* Atur lebar masing-masing section */
+  }
+</style>
+
+<div class="container p-5 mt-5 mb-5">
+  <div class="sections-container">
+    <div class="section">
+      <div class="p-5 bg-white shadow rounded-lg">
+        <img src="{{ url_for('static',filename='images/image-upload.png') }}" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill" />
+        <!-- Default bootstrap file upload-->
+        <h6 class="text-center mb-4 text-muted">Upload Gambar yang ingin dicari..</h6>
+        <form action="/recommend" method="POST" enctype="multipart/form-data">
+          <div class="custom-file overflow-hidden rounded-pill mb-5">
+            <input id="image" name="image" type="file" class="custom-file-input rounded-pill" />
+            <label for="image" class="custom-file-label rounded-pill">Choose file</label>
+          </div>
+          <!-- End -->
+          <button type="submit" class="file-upload btn btn-first btn-block rounded-pill shadow" id="btn-indexsubmit" style="display: none">Upload</button>
+        </form>
+      </div>
+    </div>
+    <div class="section">
+      <div class="p-5 bg-white shadow rounded-lg">
+          <video id="camera" autoplay class="d-block mx-auto mb-4 rounded-pill" width="320" height="240"></video>
+          <!-- Tombol untuk mengambil gambar dari kamera -->
+          <button  type="submit" id="capture-button" class="btn btn-first btn-block rounded-pill shadow">Capture</button>
+      </div>
+  </div>
+</div>
+</div>
+
+<script>
+// Mengakses elemen video dan menampilkan tampilan kamera
+const videoElement = document.getElementById('camera');
+
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(function (stream) {
+      videoElement.srcObject = stream;
+  })
+  .catch(function (error) {
+      console.error('Error accessing camera:', error);
+  });
+
+// Mengambil gambar saat tombol "Capture" ditekan
+const captureButton = document.getElementById('capture-button');
+
+captureButton.addEventListener('click', function () {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = videoElement.videoWidth;
+  canvas.height = videoElement.videoHeight;
+  context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+  // Mengonversi gambar menjadi data URL
+  const imageDataURL = canvas.toDataURL('image/jpeg');
+
+  // Kirim data gambar ke server melalui AJAX atau formulir seperti yang telah Anda tentukan sebelumnya.
+});
+</script>
+  </div>
+</div>
+{% endblock %}
