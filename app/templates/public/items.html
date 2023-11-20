@@ -11,10 +11,11 @@
         </div>
       </div>
     </div>
-
     <div class="col-md-7">
       <p class="newarrival text-center">SELECTED</p>
+
       <h2>{{ image_name}}</h2>
+
       <hr />
       <p class="font-italic text-muted mb-0">Product Code : {{ image_name }}</p>
       <ul class="list-inline small pt-3">
@@ -22,11 +23,14 @@
         <li class="list-inline-item m-0"><i class="fa fa-star text-success" style="color: #f53163 !important"></i></li>
         {% endfor %}
       </ul>
-      <!-- <p class="price">USD $20.00</p>
-      <p><b>Availability : </b>In Stock</p> -->
+      <!-- <p class="price">USD $20.00</p> -->
+      <p><b>Category Product : </b>{{ category_product }}</p>
       <p><b>Condition : </b>New</p>
       <p><b>Brand : </b>XYZ Company</p>
-      <button type="button" class="rounded-pink-button">Telusuri</button>
+      {% for item in items [:1]%}
+      <a href="{{ image_url }}" style="display: inline-block; padding: 10px 20px; border-radius: 20px; background-color: #ff69b4; color: #ffffff; text-decoration: none">Telusuri</a>
+
+      {% endfor %}
     </div>
   </div>
 
@@ -34,8 +38,8 @@
   <div class="container py-5">
     <!-- For Demo Purpose-->
     <header class="text-center mt-5">
-      <h3 class="display-4 font-weight-bold" style="color: #f53163 !important">Beberapa Items Yang Mirip</h3>
-      <p class="font-italic text-muted mb-0">Pilih Gambar Untuk Dapatkan Rekomendasi!!!</p>
+      <h3 class="display-4 font-weight-bold" style="color: #f53163 !important">Some more recommended items</h3>
+      <p class="font-italic text-muted mb-0">Select any image to get more recommendations!!!</p>
     </header>
 
     <!-- First Row [Prosucts]-->

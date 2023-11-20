@@ -89,6 +89,7 @@ class Training():
 
             path = folder + '\\' + i
             img_VGG = image.load_img(path, target_size=(224, 224))
+            # img_VGG = image.load_img(path, target_size=(128, 128))
 
             for j in range(len(transformations)):
                 # if already calculated, we activate it

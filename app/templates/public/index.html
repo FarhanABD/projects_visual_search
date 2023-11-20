@@ -32,44 +32,104 @@
         </form>
       </div>
     </div>
+
     <div class="section">
       <div class="p-5 bg-white shadow rounded-lg">
-          <video id="camera" autoplay class="d-block mx-auto mb-4 rounded-pill" width="320" height="240"></video>
-          <!-- Tombol untuk mengambil gambar dari kamera -->
-          <button  type="submit" id="capture-button" class="btn btn-first btn-block rounded-pill shadow">Capture</button>
+        <video id="live-camera" width="100%" height="auto" autoplay class="d-block mx-auto mb-4 rounded-pill"></video>
+        <h6 class="text-center mb-4 text-muted">Ambil foto dari live camera..</h6>
+        <form action="/camera" method="POST" enctype="multipart/form-data">
+        <button type="submit" id="btn-indexsubmit" onclick="takePicture()" class="btn btn-first btn-block rounded-pill shadow">Ambil Foto</button>
+        </form> 
       </div>
-  </div>
+    </div>
+
+    <script>
+      async function startCamera() {
+        const constraints = {
+          video: true
+        };
+    
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          const video = document.getElementById('live-camera');
+          video.srcObject = stream;
+        } catch (err) {
+          console.error('Error accessing the camera: ', err);
+        }
+      }
+    
+      function takePicture() {
+        const video = document.getElementById('live-camera');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+    
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+        canvas.toBlob((blob) => {
+          const formData = new FormData();
+          formData.append('live-camera', blob, 'live-camera.png');
+    
+          // Kirim blob ke server, misalnya menggunakan Fetch API atau XMLHttpRequest
+          fetch('/camera', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            // Lakukan sesuatu dengan respons dari server
+          })
+          .catch(error => {
+            console.error('Error uploading image: ', error);
+          });
+        }, 'image/png');
+      }
+      // Panggil fungsi startCamera() ketika halaman dimuat
+      document.addEventListener('DOMContentLoaded', startCamera);
+    </script>
+
+    <!-- <div class="section">
+
+        <form action="/capture" method="POST" enctype="multipart/form-data">
+          <video id="live-camera" type="file" name="live-camera" autoplay playsinline width="500"></video>
+           <button id="capture-button" class="btn btn-first btn-block rounded-pill shadow" width="500" style="display: inline" >Capture</button>
+           <canvas id="snapshot" style="display: none;"></canvas>
+        </form>        
+    </div> -->
+
+    
+    <!-- <script>
+      const videoElement = document.getElementById('live-camera');
+      const captureButton = document.getElementById('capture-button');
+      const canvasElement = document.getElementById('snapshot');
+      const context = canvasElement.getContext('2d');
+    
+      // Mengakses kamera pengguna
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          videoElement.srcObject = stream;
+        })  
+        .catch((error) => {
+          console.error('Error accessing camera: ', error);
+        });
+    
+      // Menangkap gambar saat tombol 'Capture' ditekan
+      captureButton.addEventListener('click', () => {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    
+        // Simpan gambar dalam format Data URL
+        // const imageDataURL = canvasElement.toDataURL('data/input_image', 'input.jpg');
+
+        
+      });
+    </script> -->
+
 </div>
 </div>
 
-<script>
-// Mengakses elemen video dan menampilkan tampilan kamera
-const videoElement = document.getElementById('camera');
-
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(function (stream) {
-      videoElement.srcObject = stream;
-  })
-  .catch(function (error) {
-      console.error('Error accessing camera:', error);
-  });
-
-// Mengambil gambar saat tombol "Capture" ditekan
-const captureButton = document.getElementById('capture-button');
-
-captureButton.addEventListener('click', function () {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  canvas.width = videoElement.videoWidth;
-  canvas.height = videoElement.videoHeight;
-  context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
-  // Mengonversi gambar menjadi data URL
-  const imageDataURL = canvas.toDataURL('image/jpeg');
-
-  // Kirim data gambar ke server melalui AJAX atau formulir seperti yang telah Anda tentukan sebelumnya.
-});
-</script>
-  </div>
 </div>
+</div>  
 {% endblock %}

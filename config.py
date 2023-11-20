@@ -8,7 +8,7 @@ class DevelopmentConfig(Config):
     BASEPATH = os.path.dirname(__file__)
     IMAGE_UPLOAD_LOCATION = os.path.join(BASEPATH, 'data/input_image', 'input.jpg')
     MODEL_NAME = 'VGG'
-    NO_OF_SIMILAR_IMAGES = 16
+    NO_OF_SIMILAR_IMAGES = 15
     DATASET = 'prod_data'
     #DATASET_IMAGES_PATH = os.path.join(BASEPATH, 'data/dataset', DATASET)
     DATASET_IMAGES_PATH = os.path.join(BASEPATH, 'data','dataset',DATASET)

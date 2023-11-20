@@ -87,6 +87,7 @@ class VisualSearch():
         # calculate the features of the images
         if model == 'VGG':
             img = image.load_img(path_image, target_size=(224, 224))
+            # img = image.load_img(path_image, target_size=(128, 128))
             img = image.img_to_array(img)  # convert to array
             img = np.expand_dims(img, axis=0)
             img = PP(img)
@@ -99,6 +100,9 @@ class VisualSearch():
         # identify most similar items
         self.similar_items = [self.items[i] for i in self.NN[0]][:nb_imgs]
         self.similar_images = [self.images[i] for i in self.NN[0]][:nb_imgs]
+
+        if not self.similar_items:
+            print("No similar images found in the database. Sending a notification...")
 
     def similar_items_path(self):
 
