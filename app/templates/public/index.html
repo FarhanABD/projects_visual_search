@@ -35,11 +35,12 @@
 
     <div class="section">
       <div class="p-5 bg-white shadow rounded-lg">
+        <form action="/camera" method="POST">
         <video id="live-camera" width="100%" height="auto" autoplay class="d-block mx-auto mb-4 rounded-pill"></video>
         <h6 class="text-center mb-4 text-muted">Ambil foto dari live camera..</h6>
-        <form action="/camera" method="POST" enctype="multipart/form-data">
-        <button type="submit" id="btn-indexsubmit" onclick="takePicture()" class="btn btn-first btn-block rounded-pill shadow">Ambil Foto</button>
-        </form> 
+        <button onclick="takePicture()" class="btn btn-first btn-block rounded-pill shadow">Ambil Foto</button>
+        <!-- <button type="submit" class="btn btn-first btn-block rounded-pill shadow" id="btn-indexsubmit" >Ambil Gambar</button> -->
+      </form>
       </div>
     </div>
 
@@ -51,15 +52,19 @@
     
         try {
           const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          // const video = document.getElementById('live-camera');
           const video = document.getElementById('live-camera');
           video.srcObject = stream;
         } catch (err) {
           console.error('Error accessing the camera: ', err);
         }
       }
-    
+
+      document.addEventListener('DOMContentLoaded', startCamera);
+
       function takePicture() {
         const video = document.getElementById('live-camera');
+        // const video = document.getElementById('image');
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
     
@@ -70,6 +75,7 @@
         canvas.toBlob((blob) => {
           const formData = new FormData();
           formData.append('live-camera', blob, 'live-camera.png');
+          // formData.append('image', blob, 'live-camera.png');
     
           // Kirim blob ke server, misalnya menggunakan Fetch API atau XMLHttpRequest
           fetch('/camera', {
@@ -78,6 +84,7 @@
           })
           .then(response => {
             // Lakukan sesuatu dengan respons dari server
+
           })
           .catch(error => {
             console.error('Error uploading image: ', error);
@@ -85,7 +92,7 @@
         }, 'image/png');
       }
       // Panggil fungsi startCamera() ketika halaman dimuat
-      document.addEventListener('DOMContentLoaded', startCamera);
+      // document.addEventListener('DOMContentLoaded', startCamera);
     </script>
 
     <!-- <div class="section">
